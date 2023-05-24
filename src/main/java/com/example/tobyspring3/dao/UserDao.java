@@ -24,11 +24,11 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection conn = connectionMaker.makeConnection();
+        Connection conn = connectionMaker.makeConnection(); // 1
 
-        PreparedStatement pstmt = conn.prepareStatement("select id, name, password from users where id = ?");
+        PreparedStatement pstmt = conn.prepareStatement("select id, name, password from users where id = ?"); // 2
         pstmt.setString(1, id);
-        ResultSet rs = pstmt.executeQuery();
+        ResultSet rs = pstmt.executeQuery(); // 3
         rs.next();
 
         User user = new User();
@@ -36,10 +36,10 @@ public class UserDao {
         user.setName(rs.getString("name"));
         user.setPassword(rs.getString("password"));
 
-        rs.close();
-        pstmt.close(); // 다 쓰고 닫아줘야함
-        conn.close();
-
+        rs.close(); // 3
+        pstmt.close(); // 2
+        conn.close(); // 1
+        // 다 쓰고 위 숫자 순서처럼 순서대로 다 닫아줘야함
         return user;
     }
 }
